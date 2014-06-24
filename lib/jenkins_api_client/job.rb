@@ -852,7 +852,9 @@ module JenkinsApi
 
         params = {} if params.nil? or params.empty?
         post_params = params.map { |k, v| { :name => k, :value => v } }
-        params = { :parameter => post_params }
+        post_params = { :parameter => post_params }
+        json = post_params.to_json
+        params = { :json => json }
 
         response = @client.api_post_request("/job/#{path_encode job_name}/build",
           params,
