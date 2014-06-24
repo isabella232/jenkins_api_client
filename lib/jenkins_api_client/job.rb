@@ -850,15 +850,13 @@ module JenkinsApi
           expected_build_id = current_build_id > 0 ? current_build_id + 1 : 1
         end
 
-        if (params.nil? or params.empty?)
-          response = @client.api_post_request("/job/#{path_encode job_name}/build",
-            {},
-            true)
-        else
-          response = @client.api_post_request("/job/#{path_encode job_name}/buildWithParameters",
-            params,
-            true)
-        end
+        params = {} if params.nil? or params.empty?
+        post_params = params.map { |k, v| { :name => k, :value => v } }
+        params = { :parameter => post_params }
+
+        response = @client.api_post_request("/job/#{path_encode job_name}/build",
+          params,
+          true)
 
         if (opts['build_start_timeout'] || 0) > 0
           if @client.compare_versions(@client.get_jenkins_version, JENKINS_QUEUE_ID_SUPPORT_VERSION) >= 0
