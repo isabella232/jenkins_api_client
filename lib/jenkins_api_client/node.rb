@@ -128,8 +128,8 @@ module JenkinsApi
       #   )
       #
       def create_dumb_slave(params)
-        unless params[:name] && params[:slave_host] && params[:private_key_file]
-          raise ArgumentError, "Name, slave host, and private key file are" +
+        unless params[:name] && params[:slave_host] && params[:slave_password]
+          raise ArgumentError, "Name, slave host, and password are" +
             " required for creating a slave."
         end
 
@@ -142,7 +142,6 @@ module JenkinsApi
           :labels => params[:name],
           :slave_port => 22,
           :mode => "normal",
-          :private_key_file => "",
           :credentials_id => ""
         }
 
@@ -172,7 +171,7 @@ module JenkinsApi
               "host" => params[:slave_host],
               "port" => params[:slave_port],
               "username" => params[:slave_user],
-              "privatekey" => params[:private_key_file],
+              "password" => params[:slave_password],
               "credentialsId" => params[:credentials_id]
             }
           }.to_json
