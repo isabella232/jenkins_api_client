@@ -255,8 +255,14 @@ module JenkinsApi
           @logger.info "Obtaining '#{meth_suffix}' property of '#{node_name}'"
           node_name = "(master)" if node_name == "master"
           response_json = @client.api_get_request("/computer/#{path_encode node_name}", "tree=#{path_encode meth_suffix}")
-          resp = response_json["#{meth_suffix}"].to_s
-          resp =~ /False/i ? false : true
+
+          node_data = response_json["computer"].detect do |node|
+            node["displayName"] == node_name
+          end
+
+          raise "no node called #{node_name}" if node_data.nil?
+
+          node_data[meth_suffix]
         end
       end
 
