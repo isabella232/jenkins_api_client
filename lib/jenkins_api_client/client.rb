@@ -797,6 +797,8 @@ module JenkinsApi
           "Error code #{response.code}"
         )
       end
+    rescue JSON::ParserError => e
+      raise Exceptions::BadJSON.new(@logger, e.message, response.body)
     end
 
   end

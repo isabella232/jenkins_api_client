@@ -242,5 +242,14 @@ module JenkinsApi
         super(logger, message)
       end
     end
+
+    class BadJSON < ApiException
+      attr_accessor :body
+
+      def initialize(logger, body, message)
+        super(logger, message)
+        @body = body
+      end
+    end
   end
 end
